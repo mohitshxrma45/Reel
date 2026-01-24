@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.reels-container {
+  height: 100vh;
+  background: #000;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+/* Reel */
+.reel {
+  height: 100vh;
+  position: relative;
+  scroll-snap-align: start;
+}
+
+/* Video clean */
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+ 
+  
+}
+
+/* 🔝 Name Glass */
+.reel-top {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 6px 14px;
+  border-radius: 20px;
+  backdrop-filter: blur(3px);
+  color: white;
+  font-weight: 600;
+  z-index: 2;
+}
+
+/* Right Icons + Count */
+.reel-actions {
+  position: absolute;
+  right: 15px;
+  bottom: 35%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: white;
+  text-align: center;
+  z-index: 2;
+}
+
+.icon-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  /* space between icon and count */
+  cursor: pointer;
+}
+
+.icon-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: transform .12s ease, background .12s ease;
+}
+
+.icon {
+  font-size: 18px;
+  color: white;
+}
+
+.liked {
+  color: #ff2e63;
+}
+
+.saved {
+  color: #00f5ff;
+}
+
+.count {
+  font-size: 11px;
+  color: rgba(255,255,255,0.95);
+}
+
+.icon-box:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.08);
+}
+
+
+/* 🔻 Description Glass */
+.reel-info {
+  position: absolute;
+  bottom: 90px;
+  left: 15px;
+  z-index: 2;
+}
+
+.reel-desc-box {
+  background: rgba(0, 0, 0, 0.243);
+  padding: 10px 14px;
+  border-radius: 18px;
+  backdrop-filter: blur(2px);
+  max-width: 280px;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.reel-desc-box p {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+/* Button */
+.visit-store-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #ff2e63;
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 60px;
+  background: rgba(20, 20, 20, 0.244);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 5;
+}
+
+.nav-item {
+  color: white;
+  font-size: 22px;
+}

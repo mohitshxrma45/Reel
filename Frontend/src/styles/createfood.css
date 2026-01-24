@@ -1,0 +1,307 @@
+@import './variables.css';
+
+* {
+    box-sizing: border-box;
+}
+
+.create-food-page {
+    width: 100%;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+}
+
+/* Allow page to scroll when enabled by the component (overrides reels.css) */
+body.cf-scroll-enabled {
+    overflow: auto !important;
+    --webkit-overflow-scrolling: touch;
+}
+
+.create-food-card {
+    width: 100%;
+    max-width: 720px;
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.create-food-page {
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.cf-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.cf-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.cf-form {
+    display: grid;
+    gap: 12px;
+}
+
+.cf-field label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.cf-input,
+.cf-textarea,
+.cf-file {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+}
+
+.cf-textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.cf-video-wrap {
+    width: 100%;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+}
+
+.cf-video {
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    object-fit: contain;
+    background: #000;
+}
+
+/* Video overlay and actions */
+.cf-video-wrap {
+    position: relative;
+}
+
+.cf-video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.cf-play-btn {
+    pointer-events: auto;
+    width: 68px;
+    height: 68px;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.16), rgba(0, 0, 0, 0.28));
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 30px rgba(2, 6, 23, 0.45);
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.cf-play-btn:hover {
+    transform: translateY(-4px);
+}
+
+.cf-play-btn svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+}
+
+.cf-video-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+    cursor: pointer;
+    transition: background .12s ease, transform .08s ease;
+}
+
+.icon-btn:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.icon-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+}
+
+/* Upload label improvements */
+.cf-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1.5px dashed rgba(100, 116, 139, 0.12);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.02));
+    color: var(--muted);
+    cursor: pointer;
+    text-align: center;
+}
+
+.cf-upload svg {
+    width: 46px;
+    height: 46px;
+}
+
+.cf-upload-text {
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* Upload styling */
+.cf-upload {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cf-file {
+    display: none;
+}
+
+.cf-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1.5px dashed rgba(100, 116, 139, 0.18);
+    background: var(--input-bg);
+    color: var(--muted);
+    cursor: pointer;
+    text-align: center;
+    transition: box-shadow .12s ease, transform .08s ease, border-color .12s ease;
+}
+
+.cf-upload-label:hover {
+    box-shadow: 0 8px 28px rgba(2, 6, 23, 0.06);
+    transform: translateY(-2px);
+}
+
+.cf-upload svg {
+    width: 44px;
+    height: 44px;
+    fill: none;
+    stroke: var(--accent-600);
+    stroke-width: 1.8px;
+}
+
+.cf-upload-text {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.cf-upload-hint {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.cf-filename {
+    font-size: 0.85rem;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cf-upload-change {
+    background: transparent;
+    border: none;
+    padding: 6px 8px;
+    color: var(--accent-600);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cf-actions {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.cf-btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cf-btn.primary {
+    background: linear-gradient(180deg, var(--accent), var(--accent-600));
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.12);
+}
+
+.cf-btn.ghost {
+    background: transparent;
+    color: var(--accent-600);
+    border: 1px solid rgba(var(--accent-rgb), 0.12);
+}
+
+@media (min-width: 720px) {
+    .cf-actions {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 420px) {
+    .create-food-card {
+        padding: 14px;
+        border-radius: 10px;
+    }
+
+    .cf-title {
+        font-size: 1rem;
+    }
+
+    .cf-video-wrap {
+        min-height: 140px;
+    }
+}

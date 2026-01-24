@@ -1,0 +1,65 @@
+:root {
+  /* Spacing */
+  --space-xs: 6px;
+  --space-sm: 10px;
+  --space-md: 16px;
+  --space-lg: 24px;
+
+  /* Sizing */
+  --card-width: 420px;
+
+  /* Radius */
+  --radius: 12px;
+
+  /* Typography */
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
+
+  /* Tailwind-inspired professional palette (light)
+     Accent: Indigo/Blue 600 for strong, familiar CTA color
+  */
+  --bg: #f8fafc;
+  /* page background (slight cool neutral) */
+  --surface: #ffffff;
+  /* cards / surfaces */
+  --text: #0f1724;
+  /* primary text (slate-900) */
+  --muted: #64748b;
+  /* secondary text (slate-500) */
+  --accent: #2563eb;
+  /* blue-600 */
+  --accent-600: #1e40af;
+  /* blue-800 */
+  --accent-400: #60a5fa;
+  /* blue-400 */
+  --input-bg: #f1f5f9;
+  /* slate-50 */
+  --border: #e6eef8;
+  /* subtle border */
+  --shadow: 0 8px 30px rgba(2, 6, 23, 0.06);
+  --accent-rgb: 37, 99, 235;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark-mode equivalents */
+    --bg: #0f1724;
+    /* slate-900 */
+    --surface: #0b1220;
+    /* deep surface */
+    --text: #e6eef8;
+    /* light text */
+    --muted: #94a3b8;
+    /* slate-400 */
+    --accent: #60a5fa;
+    /* blue-400 (brighter on dark) */
+    --accent-600: #3b82f6;
+    /* blue-500 */
+    --accent-400: #93c5fd;
+    /* blue-300 */
+    --input-bg: #061126;
+    --border: #0f2134;
+    --shadow: 0 10px 36px rgba(2, 6, 23, 0.6);
+    --accent-rgb: 96, 165, 250;
+  }
+}
