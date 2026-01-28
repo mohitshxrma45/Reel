@@ -49,7 +49,7 @@ const Saved = ({ isDark, toggleTheme }) => {
 
   async function likeVideo(item) {
     try {
-      const response = await axios.post("http://localhost:3000/api/food/like", { foodId: item._id }, { withCredentials: true })
+      const response = await axios.post("https://reel-1-ump1.onrender.com/api/food/like", { foodId: item._id }, { withCredentials: true })
       if (response.data.like) {
         setVideos(prev => prev.map(v => v._id === item._id ? { ...v, likeCount: (v.likeCount ?? 0) + 1 } : v))
         setLiked(prev => ({ ...prev, [item._id]: true }))
@@ -64,7 +64,7 @@ const Saved = ({ isDark, toggleTheme }) => {
 
   async function saveVideo(item) {
     try {
-      const response = await axios.post("http://localhost:3000/api/food/save", { foodId: item._id }, { withCredentials: true })
+      const response = await axios.post("https://reel-1-ump1.onrender.com/api/food/save", { foodId: item._id }, { withCredentials: true })
       if (response.data.save) {
         setVideos(prev => prev.map(v => v._id === item._id ? { ...v, savesCount: (v.savesCount ?? 0) + 1 } : v))
         setSaved(prev => ({ ...prev, [item._id]: true }))

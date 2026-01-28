@@ -20,7 +20,7 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
       const address = e.target.address.value
       const password = e.target.password.value
 
-      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register", {
+      const response = await axios.post("https://reel-1-ump1.onrender.com/api/auth/food-partner/register", {
         name,
         email,
         phone,

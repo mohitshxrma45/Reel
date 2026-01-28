@@ -53,7 +53,7 @@ const Home = ({ isDark, toggleTheme }) => {
   async function likeVideo(item) {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/food/like",
+        "https://reel-1-ump1.onrender.com/api/food/like",
         { foodId: item._id },
         { withCredentials: true }
       )
@@ -81,7 +81,7 @@ const Home = ({ isDark, toggleTheme }) => {
   async function saveVideo(item) {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/food/save",
+        "https://reel-1-ump1.onrender.com/api/food/save",
         { foodId: item._id },
         { withCredentials: true }
       )
