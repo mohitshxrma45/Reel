@@ -1,11 +1,13 @@
+// src/pages/foodPartner/Profile.jsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { FiSun, FiMoon } from "react-icons/fi";
 
-const Profile = () => {
+const Profile = ({ isDark, toggleTheme }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
-  const [video, setVideo] = useState([]);
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     axios
@@ -14,189 +16,100 @@ const Profile = () => {
       })
       .then((response) => {
         setProfile(response.data.foodPartner);
-        setVideo(response.data.foodPartner.foodItems || []);
+        setVideos(response.data.foodPartner.foodItems || []);
       })
       .catch((err) => console.log("Fetch Error:", err));
   }, [id]);
 
-  return (
-    <div className="profile-shell">
-      <div className="profile-card">
-
-        {/* ===== TOP ===== */}
-        <header className="profile-top">
-         
-         
-          <img className="avatar" src="https://plus.unsplash.com/premium_photo-1767883339990-1a3e9676a9c1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGZvb2QlMjBwZXJzb258ZW58MHx8MHx8fDA%3D" alt="" />
-         
-
-
-          <div className="meta">
-            <div className="chip name">{profile?.name}</div>
-            <div className="chip address">{profile?.address}</div>
-          </div>
-        </header>
-
-        {/* ===== STATS ===== */}
-        <section className="profile-stats">
-          <div className="stat">
-            <div className="label">Total Meals</div>
-            <div className="value">{profile?.totalMeals || 0}</div>
-          </div>
-          <div className="stat">
-            <div className="label">Customers Served</div>
-            <div className="value">{profile?.customersServed || 0}</div>
-          </div>
-        </section>
-
-        <hr className="divider" />
-
-        {/* ===== VIDEOS GRID ===== */}
-        <section className="videos-grid">
-          {video.map((v) => (
-            <div key={v._id} className="video-tile">
-              <video
-                src={v.video}
-                loop
-                muted
-                autoPlay
-                playsInline
-                className="food-video"
-              />
-            </div>
-          ))}
-        </section>
+  if (!profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 via-blue-50 to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <p className="text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
+    );
+  }
 
-      {/* ===== CSS ===== */}
-      <style>{`
-        .profile-shell {
-          min-height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 20px;
-          background: #000;
-        }
+  return (
+    <div className="min-h-screen py-8 px-4 bg-linear-to-br from-slate-50 via-blue-50 to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <button
+        onClick={toggleTheme}
+        className="fixed top-6 right-6 p-2 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-yellow-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-200 shadow-md z-20"
+        aria-label="Toggle theme"
+      >
+        {isDark ? <FiSun size={20} /> : <FiMoon size={20} />}
+      </button>
 
-        .profile-card {
-          width: 100%;
-          max-width: 420px;
-          height: 90vh;
-          background: rgba(255,255,255,0.03);
-          border-radius: 14px;
-          padding: 16px;
-          color: #fff;
-          display: flex;
-          flex-direction: column;
-          font-family: system-ui;
-        }
+      <div className="max-w-4xl mx-auto">
+        <div className="backdrop-blur-xl bg-white/80 dark:bg-slate-800/50 border border-white/20 dark:border-slate-700/50 rounded-2xl shadow-2xl p-8 mb-8">
+          <div className="flex gap-6 mb-8">
+            <div className="relative w-24 h-24">
+              {profile.profilePicture ? (
+                <img
+                  src={profile.profilePicture}
+                  alt={profile.name}
+                  className="w-full h-full rounded-full object-cover shadow-lg"
+                />
+              ) : (
+                <div className="w-full h-full rounded-full bg-linear-to-br from-orange-400 to-red-600 flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+                  {profile.name?.[0]?.toUpperCase()}
+                </div>
+              )}
+            </div>
 
-        .profile-top {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-          margin-bottom: 12px;
-        }
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-1">
+                {profile.name}
+              </h1>
+              <p className="text-slate-600 dark:text-slate-400 flex items-center gap-2 mb-3">
+                📍 {profile.address}
+              </p>
+              <div className="flex gap-4 text-sm">
+                <div className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-lg font-semibold">
+                  {profile.totalMeals || 0} Meals
+                </div>
+                <div className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg font-semibold">
+                  {profile.customersServed || 0} Customers
+                </div>
+              </div>
+            </div>
+          </div>
 
-        .avatar {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #0a5, #063);
-          object-fit: cover;
-          overflow: hidden;
-          border: 3px solid #00ff88;
+          <hr className="border-slate-200 dark:border-slate-700 my-6" />
 
-        }
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+            Featured Dishes
+          </h2>
 
-        .chip {
-          padding: 6px 10px;
-          border-radius: 8px;
-          background: rgba(0,0,0,0.6);
-          font-weight: 600;
-        }
-
-        .chip.name {
-          font-size: 18px;
-          color: #fff;
-        }
-
-        .chip.address {
-          font-size: 14px;
-          color: #ccc;
-        }
-
-        .profile-stats {
-          display: flex;
-          justify-content: space-around;
-          margin-bottom: 10px;
-        }
-
-        .stat .label {
-          font-size: 12px;
-          opacity: 0.7;
-        }
-
-        .stat .value {
-          font-size: 18px;
-          font-weight: 700;
-        }
-
-        .divider {
-          border: none;
-          height: 1px;
-          background: rgba(255,255,255,0.08);
-          margin-bottom: 10px;
-        }
-
-        /* === GRID === */
-        .videos-grid {
-          flex: 1;
-          overflow-y: auto;
-          overflow-x: hidden;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
-          padding-right: 4px;
-        }
-
-        .video-tile {
-          width: 100%;
-          .video-tile {
-  aspect-ratio: 9 / 16;   /* 🔥 Reel ratio */
-}
-
-          border-radius: 8px;
-          overflow: hidden;
-          background: rgba(255,255,255,0.05);
-        }
-
-        .food-video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        /* Scrollbar hidden horizontal */
-        .videos-grid::--webkit-scrollbar-horizontal {
-          display: none;
-        }
-
-        /* Responsive card width only */
-        @media (min-width: 768px) {
-          .profile-card {
-            max-width: 700px;
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .profile-card {
-            max-width: 900px;
-            height: 85vh;
-          }
-        }
-      `}</style>
+          {videos.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-slate-600 dark:text-slate-400">No dishes listed yet</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {videos.map((v) => (
+                <div
+                  key={v._id}
+                  className="group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 aspect-9/16"
+                >
+                  <video
+                    src={v.video}
+                    loop
+                    muted
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                    <button className="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg font-semibold hover:bg-white/30 transition-colors">
+                      {v.name}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
