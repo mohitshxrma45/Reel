@@ -113,7 +113,7 @@ function logoutUser(req, res) {
 //food partner register karne ke liye function
 async function registerFoodPartner(req, res) {
 
-    const { name, email, password, phone, address } = req.body;
+    const { name, email, password, phone, address, link } = req.body;
 
     const isAccountAlreadyExist = await FoodPartnerModel.findOne({ email });
 
@@ -128,7 +128,8 @@ async function registerFoodPartner(req, res) {
         email,
         password: hashedPassword,
         phone,
-        address
+        address,
+        link
     });
 
 

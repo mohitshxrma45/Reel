@@ -53,7 +53,7 @@ const Home = ({ isDark, toggleTheme }) => {
   async function likeVideo(item) {
     try {
       const response = await axios.post(
-        "https://reel-1-ump1.onrender.com/api/food/like",
+        "http://localhost:3000/api/food/like",
         { foodId: item._id },
         { withCredentials: true }
       )
@@ -81,7 +81,7 @@ const Home = ({ isDark, toggleTheme }) => {
   async function saveVideo(item) {
     try {
       const response = await axios.post(
-        "https://reel-1-ump1.onrender.com/api/food/save",
+        "http://localhost:3000/api/food/save",
         { foodId: item._id },
         { withCredentials: true }
       )
@@ -111,13 +111,7 @@ const Home = ({ isDark, toggleTheme }) => {
       ref={containerRef}
       className="h-screen w-screen bg-black overflow-y-scroll snap-y snap-mandatory scroll-smooth"
     >
-      <button
-        onClick={toggleTheme}
-        className="fixed top-6 right-6 p-2 rounded-lg bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors duration-200 shadow-lg z-30"
-        aria-label="Toggle theme"
-      >
-        {isDark ? <FiSun size={20} /> : <FiMoon size={20} />}
-      </button>
+      
 
       {videos.map((item) => (
         <ReelCard
@@ -128,6 +122,7 @@ const Home = ({ isDark, toggleTheme }) => {
           onLike={likeVideo}
           onSave={saveVideo}
           getCount={getCount}
+
         />
       ))}
 

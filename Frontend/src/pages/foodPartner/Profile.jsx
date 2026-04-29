@@ -63,13 +63,43 @@ const Profile = ({ isDark, toggleTheme }) => {
               <p className="text-slate-600 dark:text-slate-400 flex items-center gap-2 mb-3">
                 📍 {profile.address}
               </p>
-              <div className="flex gap-4 text-sm">
-                <div className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-lg font-semibold">
-                  {profile.totalMeals || 0} Meals
-                </div>
-                <div className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg font-semibold">
-                  {profile.customersServed || 0} Customers
-                </div>
+              
+              {/* Location, Phone, Restaurant Link */}
+              <div className="flex flex-wrap gap-4 mt-4">
+                {profile.location && (
+                  <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                    <span className="text-lg">📍</span>
+                    <span className="text-slate-700 dark:text-slate-300 text-sm">
+                      {profile.location.coordinates?.[1]?.toFixed(4)}, {profile.location.coordinates?.[0]?.toFixed(4)}
+                    </span>
+                  </div>
+                )}
+                
+                {profile.phone && (
+                  <a 
+                    href={`tel:${profile.phone}`}
+                    className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-700/50 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600/50 transition-colors"
+                  >
+                    <span className="text-lg">📞</span>
+                    <span className="text-slate-700 dark:text-slate-300 text-sm">
+                      {profile.phone}
+                    </span>
+                  </a>
+                )}
+                
+                {profile.link && (
+                  <a 
+                    href={profile.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-800/40 transition-colors"
+                  >
+                    <span className="text-lg">🍽️</span>
+                    <span className="text-orange-700 dark:text-orange-400 text-sm font-medium">
+                      Visit Restaurant
+                    </span>
+                  </a>
+                )}
               </div>
             </div>
           </div>

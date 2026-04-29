@@ -4,6 +4,12 @@ import { Link } from "react-router-dom"
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from "react-icons/fa"
 
 const ReelCard = ({ item, liked, saved, onLike, onSave, getCount }) => {
+
+  
+
+
+
+
   return (
     <section className="relative h-screen w-full snap-start flex items-center justify-center bg-black overflow-hidden">
       <video
@@ -16,6 +22,7 @@ const ReelCard = ({ item, liked, saved, onLike, onSave, getCount }) => {
 
       <div className="absolute top-4 left-4 z-20 backdrop-blur-md bg-black/40 rounded-full px-4 py-2">
         <h3 className="text-white font-semibold text-sm truncate max-w-xs">{item.name}</h3>
+       
       </div>
 
       <div className="absolute right-4 bottom-1/3 z-20 flex flex-col gap-4">

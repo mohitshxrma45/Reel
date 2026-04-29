@@ -29,7 +29,9 @@ const foodSchema = new mongoose.Schema({
     savesCount:{
         type: Number,
         default: 0
-    }
+    },
+  
+    
     
 })
 

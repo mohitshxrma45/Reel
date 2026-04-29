@@ -19,13 +19,15 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
       const phone = e.target.phone.value
       const address = e.target.address.value
       const password = e.target.password.value
+      const link = e.target.link.value
 
-      const response = await axios.post("https://reel-1-ump1.onrender.com/api/auth/food-partner/register", {
+      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register", {
         name,
         email,
         phone,
         address,
-        password
+        password,
+        link
       }, {
         withCredentials: true
       })
@@ -107,6 +109,19 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
                   type="text"
                   name="address"
                   placeholder="Street, City, State"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Restaurant Link</label>
+              <div className="relative">
+                <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
+                <input
+                  type="url"
+                  name="link"
+                  placeholder="https://your-restaurant.com"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
                 />
               </div>

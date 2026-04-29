@@ -23,6 +23,10 @@ const foodPartnerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    link:{
+        type: String,
+        required: true
+    }
 });
 
 const FoodPartner = mongoose.model('Foodpartner', foodPartnerSchema);
