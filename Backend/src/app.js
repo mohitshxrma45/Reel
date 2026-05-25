@@ -10,8 +10,21 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 
+// Configure CORS origins via environment variable FRONTEND_URLS (comma-separated)
+const allowedFrontends = (process.env.FRONTEND_URLS || 'http://localhost:5173,https://reel-5wnb.vercel.app')
+  .split(',')
+  .map(s => s.trim())
+
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: function(origin, callback) {
+        // allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+        if (allowedFrontends.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS policy: This origin is not allowed: ' + origin));
+        }
+    },
     credentials: true,
 }));
 

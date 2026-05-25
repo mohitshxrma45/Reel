@@ -39,7 +39,12 @@ async function registerUser(req, res) {
 
 
     //cookie set karna
-    res.cookie("token", token);
+    const cookieOptions = {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+    };
+    res.cookie("token", token, cookieOptions);
 
     res.status(201).json({
         message: 'User registered successfully',
@@ -87,7 +92,12 @@ async function loginUser(req, res) {
     }, process.env.JWT_SECRET);
 
 
-    res.cookie("token", token);
+    const cookieOptions = {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+    };
+    res.cookie("token", token, cookieOptions);
     res.status(200).json({
         message: 'User logged in successfully',
         user: {
@@ -101,7 +111,7 @@ async function loginUser(req, res) {
 
 //user ko logout karne ke liye function
 function logoutUser(req, res) {
-    res.clearCookie("token");
+    res.clearCookie("token", { httpOnly: true, sameSite: 'None', secure: true });
     res.status(200).json({ message: "User logged out successfully" });
 }
 
@@ -153,8 +163,13 @@ async function registerFoodPartner(req, res) {
         role: 'food-partner'
     }, process.env.JWT_SECRET);
 
-    // Cookie set karna
-    res.cookie("token", token);
+    // Cookie set karna (cross-site cookie for deployed frontend)
+    const cookieOptions = {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+    };
+    res.cookie("token", token, cookieOptions);
 
     res.status(201).json({
         message: 'Food partner registered successfully',
@@ -188,7 +203,12 @@ async function loginFoodPartner(req, res) {
         id: foodPartner._id,
     }, process.env.JWT_SECRET);
 
-    res.cookie("token", token);
+    const cookieOptions = {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+    };
+    res.cookie("token", token, cookieOptions);
 
     res.status(200).json({
         message: 'Food Partner logged in successfully',
@@ -202,7 +222,7 @@ async function loginFoodPartner(req, res) {
 
 //food partner logout karne ke liye function
 function logoutFoodPartner(req, res) {
-    res.clearCookie("token");
+    res.clearCookie("token", { httpOnly: true, sameSite: 'None', secure: true });
     res.status(200).json({ message: "Food Partner logged out successfully" });
 }
 

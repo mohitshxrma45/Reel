@@ -20,7 +20,7 @@ const UserRegister = ({ isDark, toggleTheme }) => {
       const address = e.target.address.value
       const password = e.target.password.value
 
-      const response = await axios.post("http://localhost:3000/api/auth/user/register", {
+      const response = await axios.post("/api/auth/user/register", {
         name,
         email,
         password,

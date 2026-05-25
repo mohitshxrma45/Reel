@@ -25,6 +25,13 @@ Environment variables (Backend/.env)
 Ports & CORS
 - Server listens on port `3000` by default.
 - CORS is configured in `src/app.js` to allow the dev frontend at `http://localhost:5173` and to send cookies (`credentials: true`).
+ - For deployments, set `FRONTEND_URLS` (comma-separated) to include your frontend host(s), e.g. `https://reel-5wnb.vercel.app`.
+
+Deploying on Render
+- Create a new Node.js Web Service on Render and connect your repo.
+- Set the service `Start Command` to `npm start` (the `start` script runs `node server.js`).
+- Add environment variables in Render dashboard: `JWT_SECRET`, `MONGODB_URI`, `IMAGEKIT_*`, and `FRONTEND_URLS` (e.g. `https://reel-5wnb.vercel.app`).
+- Ensure `FRONTEND_URLS` includes any dev host(s) you still use.
 
 Important files
 - `server.js` — runs the server and connects to DB

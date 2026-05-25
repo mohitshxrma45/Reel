@@ -51,7 +51,7 @@ const Home = ({ isDark, toggleTheme }) => {
   // Fetch videos with partner location data
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/food/with-partners", { withCredentials: true })
+      .get("/api/food/with-partners", { withCredentials: true })
       .then((res) => setVideos(res.data.foodItems))
       .catch((err) => console.log("API Error:", err))
   }, [])
@@ -86,7 +86,7 @@ const Home = ({ isDark, toggleTheme }) => {
   // Handle view increment
   const handleView = async (foodId) => {
     try {
-      await axios.put(`http://localhost:3000/api/food/${foodId}/view`, {}, {
+      await axios.put(`/api/food/${foodId}/view`, {}, {
         withCredentials: true
       })
       // Update local view count
@@ -103,7 +103,7 @@ const Home = ({ isDark, toggleTheme }) => {
   async function likeVideo(item) {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/food/like",
+        "/api/food/like",
         { foodId: item._id },
         { withCredentials: true }
       )
@@ -131,7 +131,7 @@ const Home = ({ isDark, toggleTheme }) => {
   async function saveVideo(item) {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/food/save",
+        "/api/food/save",
         { foodId: item._id },
         { withCredentials: true }
       )
@@ -158,7 +158,7 @@ const Home = ({ isDark, toggleTheme }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:3000/api/auth/user/logout", { withCredentials: true })
+      await axios.get("/api/auth/user/logout", { withCredentials: true })
       window.location.href = "/"
     } catch (err) {
       console.log("Logout error:", err)

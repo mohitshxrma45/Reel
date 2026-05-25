@@ -11,7 +11,7 @@ const Profile = ({ isDark, toggleTheme }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/food-partner/${id}`, {
+      .get(`/api/food-partner/${id}`, {
         withCredentials: true,
       })
       .then((response) => {

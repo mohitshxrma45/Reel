@@ -65,7 +65,7 @@ const CreateFood = ({ isDark, toggleTheme }) => {
       formData.append('description', description)
       formData.append('foodCost', foodCost)
 
-      const response = await axios.post('http://localhost:3000/api/food', formData, {
+      const response = await axios.post('/api/food', formData, {
         withCredentials: true,
       })
 

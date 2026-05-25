@@ -48,3 +48,16 @@ Troubleshooting
 - If auth cookie is not present, check DevTools → Application → Cookies and ensure requests include credentials.
 
 If you'd like, I can replace all hard-coded `http://localhost:3000` usages with relative paths to rely fully on `VITE_API_URL`.
+
+---
+
+Deployment (Vercel)
+- Production frontend URL: `https://reel-5wnb.vercel.app`.
+- Build & Deploy on Vercel:
+	- Connect the repository in Vercel.
+	- Set environment variable `VITE_API_URL` to `https://reel-3-2fi7.onrender.com` in the Vercel project settings.
+	- Vercel will run the build (`npm run build`) and deploy the static site.
+- Alternatively, this project already contains `Frontend/.env.production` with `VITE_API_URL` pointing to the Render backend — ensure Vercel environment variables are set appropriately and avoid committing sensitive values.
+
+Notes
+- The frontend now uses relative API paths (e.g. `/api/auth/user/login`) and `src/services/api.js` sets `axios.defaults.baseURL` from `VITE_API_URL` (fallbacks to the Render backend URL).

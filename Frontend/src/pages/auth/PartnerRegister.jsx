@@ -74,7 +74,7 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
       const password = e.target.password.value
       const link = e.target.link.value
 
-      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register", {
+      const response = await axios.post("/api/auth/food-partner/register", {
         name,
         email,
         phone,
