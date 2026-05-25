@@ -23,11 +23,26 @@ const foodPartnerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    link:{
+    link: {
         type: String,
         required: true
+    },
+    // GeoJSON location for geospatial queries (longitude, latitude)
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number],  // [longitude, latitude]
+            default: undefined
+        }
     }
 });
+
+// Create 2dsphere index for geospatial queries
+foodPartnerSchema.index({ location: '2dsphere' });
 
 const FoodPartner = mongoose.model('Foodpartner', foodPartnerSchema);
 

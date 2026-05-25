@@ -10,11 +10,11 @@ async function createFood(req, res) {
 
     const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
 
-
     const foodItem = await foodModel.create({
         name: req.body.name,
         description: req.body.description,
         video: fileUploadResult.url,
+        foodCost: req.body.foodCost,  // ADD THIS
         FoodPartner: req.foodPartner._id
     })
 
@@ -148,7 +148,14 @@ async function saveFood(req, res) {
 async function getSavedFood(req, res) {
     const user = req.user;
 
-    const savedFoods = await saveModel.find({ user: user._id }).populate('food');
+    const savedFoods = await saveModel.find({ user: user._id })
+        .populate({
+            path: 'food',
+            populate: {
+                path: 'FoodPartner',
+                select: 'name location'
+            }
+        });
 
     if (!savedFoods || savedFoods.length === 0) {
         return res.status(200).json({
@@ -163,16 +170,54 @@ async function getSavedFood(req, res) {
 
 }
 
+// Controller to increment views
+async function incrementViews(req, res) {
+    try {
+        const { id } = req.params;
 
+        const food = await foodModel.findByIdAndUpdate(
+            id,
+            { $inc: { views: 1 } },
+            { new: true }
+        );
 
+        if (!food) {
+            return res.status(404).json({ error: "Food not found" });
+        }
 
+        res.status(200).json({
+            message: "Views incremented",
+            views: food.views
+        });
+    } catch (err) {
+        console.error("Increment Views Error:", err);
+        return res.status(500).json({ error: "Server error" });
+    }
+}
+
+// Controller to get food with partner location
+async function getFoodWithPartners(req, res) {
+    try {
+        const foodItems = await foodModel.find({})
+            .populate('FoodPartner', 'name location')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            message: "Food items fetched successfully",
+            foodItems
+        });
+    } catch (err) {
+        console.error("Get Food With Partners Error:", err);
+        return res.status(500).json({ error: "Server error" });
+    }
+}
 
 module.exports = {
     createFood,
     getfoodItems,
     likeFood,
     saveFood,
-    getSavedFood
-
-
+    getSavedFood,
+    incrementViews,
+    getFoodWithPartners
 }

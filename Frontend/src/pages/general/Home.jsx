@@ -2,28 +2,61 @@
 import React, { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom"
-import { FiHome, FiBookmark, FiLogOut, FiSun, FiMoon } from "react-icons/fi"
+import { FiHome, FiBookmark, FiLogOut, FiSun, FiMoon, FiNavigation } from "react-icons/fi"
 import ReelCard from "../../components/ReelCard"
 
 const Home = ({ isDark, toggleTheme }) => {
   const [videos, setVideos] = useState([])
   const [liked, setLiked] = useState({})
   const [saved, setSaved] = useState({})
+  const [userLocation, setUserLocation] = useState(null)
+  const [locationError, setLocationError] = useState('')
+  const [isLocating, setIsLocating] = useState(false)
   const containerRef = useRef(null)
 
   const getCount = (val) => {
     if (Array.isArray(val)) return val.length
-    if (typeof val === "number") return val
+    if (typeof val === 'number') return val
     return 0
   }
 
+  // Get user location on mount
+  useEffect(() => {
+    getUserLocation()
+  }, [])
+
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation not supported')
+      return
+    }
+
+    setIsLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        })
+        setIsLocating(false)
+      },
+      (error) => {
+        setLocationError('Location unavailable - distance not shown')
+        setIsLocating(false)
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    )
+  }
+
+  // Fetch videos with partner location data
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/food", { withCredentials: true })
+      .get("http://localhost:3000/api/food/with-partners", { withCredentials: true })
       .then((res) => setVideos(res.data.foodItems))
       .catch((err) => console.log("API Error:", err))
   }, [])
 
+  // Intersection Observer for auto-play
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
@@ -49,6 +82,23 @@ const Home = ({ isDark, toggleTheme }) => {
     reels.forEach((r) => obs.observe(r))
     return () => obs.disconnect()
   }, [videos])
+
+  // Handle view increment
+  const handleView = async (foodId) => {
+    try {
+      await axios.put(`http://localhost:3000/api/food/${foodId}/view`, {}, {
+        withCredentials: true
+      })
+      // Update local view count
+      setVideos(prev => 
+        prev.map(v => 
+          v._id === foodId ? { ...v, views: (v.views || 0) + 1 } : v
+        )
+      )
+    } catch (err) {
+      console.log("View increment error:", err)
+    }
+  }
 
   async function likeVideo(item) {
     try {
@@ -106,50 +156,73 @@ const Home = ({ isDark, toggleTheme }) => {
     }
   }
 
+  const handleLogout = async () => {
+    try {
+      await axios.get("http://localhost:3000/api/auth/user/logout", { withCredentials: true })
+      window.location.href = "/"
+    } catch (err) {
+      console.log("Logout error:", err)
+    }
+  }
+
   return (
-    <div
-      ref={containerRef}
-      className="h-screen w-screen bg-black overflow-y-scroll snap-y snap-mandatory scroll-smooth"
-    >
-      
+    <div className="h-screen w-full bg-black">
+      {/* Top Bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-gradient from-black/80 to-transparent">
+        <div className="flex items-center gap-2">
+          
+          {isLocating && (
+            <span className="text-xs text-slate-400">Getting location...</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={getUserLocation}
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            title="Update location"
+          >
+            <FiNavigation className="text-white" size={18} />
+          </button>
+          
+        </div>
+      </div>
 
-      {videos.map((item) => (
-        <ReelCard
-          key={item._id}
-          item={item}
-          liked={liked}
-          saved={saved}
-          onLike={likeVideo}
-          onSave={saveVideo}
-          getCount={getCount}
+      {/* Video Feed */}
+      <div ref={containerRef} className="h-full overflow-y-scroll snap-y snap-mandatory">
+        {videos.length === 0 ? (
+          <div className="h-screen flex items-center justify-center">
+            <p className="text-slate-400">No videos available</p>
+          </div>
+        ) : (
+          videos.map((item) => (
+            <ReelCard
+              key={item._id}
+              item={item}
+              liked={liked}
+              saved={saved}
+              onLike={likeVideo}
+              onSave={saveVideo}
+              getCount={getCount}
+              userLocation={userLocation}
+              onView={handleView}
+            />
+          ))
+        )}
+      </div>
 
-        />
-      ))}
-
-      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex gap-4 bg-black/50 backdrop-blur-xl rounded-full p-3 border border-white/10">
-        <Link
-          to="/home"
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white hover:shadow-lg hover:scale-110 transition-all duration-200"
-          title="Home"
-        >
-          <FiHome size={20} />
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-4 py-3 bg-gradient from-black/80 to-transparent">
+        <Link to="/home" className="flex flex-col items-center gap-1">
+          <FiHome className="text-white" size={24} />
+          <span className="text-xs text-white">Home</span>
         </Link>
-        <Link
-          to="/saved"
-          className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-white/10 text-white hover:scale-110 transition-all duration-200"
-          title="Saved"
-        >
-          <FiBookmark size={20} />
+        <Link to="/saved" className="flex flex-col items-center gap-1">
+          <FiBookmark className="text-white" size={24} />
+          <span className="text-xs text-white">Saved</span>
         </Link>
-        <button
-          onClick={() => {
-            localStorage.removeItem('theme')
-            window.location.href = '/'
-          }}
-          className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-red-500/20 text-red-400 hover:text-red-300 hover:scale-110 transition-all duration-200"
-          title="Logout"
-        >
-          <FiLogOut size={20} />
+        <button onClick={handleLogout} className="flex flex-col items-center gap-1">
+          <FiLogOut className="text-white" size={24} />
+          <span className="text-xs text-white">Logout</span>
         </button>
       </div>
     </div>

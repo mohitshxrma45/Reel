@@ -9,6 +9,7 @@ const CreateFood = ({ isDark, toggleTheme }) => {
   const [preview, setPreview] = useState(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [foodCost, setFoodCost] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
   const [loading, setLoading] = useState(false)
   const videoRef = useRef(null)
@@ -62,6 +63,7 @@ const CreateFood = ({ isDark, toggleTheme }) => {
       formData.append('video', videoFile)
       formData.append('name', title)
       formData.append('description', description)
+      formData.append('foodCost', foodCost)
 
       const response = await axios.post('http://localhost:3000/api/food', formData, {
         withCredentials: true,
@@ -156,6 +158,21 @@ const CreateFood = ({ isDark, toggleTheme }) => {
               />
             </div>
 
+            {/* NEW: Food Cost Field */}
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Food Cost (₹)</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400">₹</span>
+                <input
+                  type="number"
+                  placeholder="150"
+                  value={foodCost}
+                  onChange={(e) => setFoodCost(e.target.value)}
+                  className="w-full pl-8 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Description</label>
               <textarea
@@ -169,7 +186,7 @@ const CreateFood = ({ isDark, toggleTheme }) => {
             <div className="flex gap-3">
               <button
                 type="submit"
-                disabled={loading || !videoFile}
+                disabled={loading || !videoFile || !foodCost}
                 className="flex-1 py-3 bg-linear-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating...' : 'Create Listing'}
@@ -181,6 +198,7 @@ const CreateFood = ({ isDark, toggleTheme }) => {
                   setPreview(null)
                   setTitle('')
                   setDescription('')
+                  setFoodCost('')
                 }}
                 className="px-6 py-3 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-semibold rounded-xl transition-all duration-200"
               >

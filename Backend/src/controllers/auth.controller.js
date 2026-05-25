@@ -113,39 +113,55 @@ function logoutUser(req, res) {
 //food partner register karne ke liye function
 async function registerFoodPartner(req, res) {
 
-    const { name, email, password, phone, address, link } = req.body;
+    const { name, email, password, phone, address, link, latitude, longitude } = req.body;
 
-    const isAccountAlreadyExist = await FoodPartnerModel.findOne({ email });
+    // Check if partner already exists
+    const isPartnerAlreadyExist = await FoodPartnerModel.findOne({ email });
 
-    if (isAccountAlreadyExist) {
-        return res.status(400).json({ message: 'Account already exists' });
+    if (isPartnerAlreadyExist) {
+        return res.status(400).json({ message: 'Food partner already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const foodPartner = await FoodPartnerModel.create({
+    // Build location object if coordinates provided
+    let location = undefined;
+    if (latitude && longitude) {
+        location = {
+            type: 'Point',
+            coordinates: [parseFloat(longitude), parseFloat(latitude)]
+        };
+    }
+
+    // Create partner
+    const partner = await FoodPartnerModel.create({
         name,
         email,
         password: hashedPassword,
         phone,
         address,
-        link
+        link,
+        location
     });
 
-
+    // Create token
     const token = jwt.sign({
-        id: foodPartner._id,
+        id: partner._id,
+        role: 'food-partner'
     }, process.env.JWT_SECRET);
 
+    // Cookie set karna
     res.cookie("token", token);
+
     res.status(201).json({
-        message: 'Food Partner registered successfully',
-        foodPartner: {
-            _id: foodPartner._id,
-            email: foodPartner.email,
-            name: foodPartner.name,
-            phone: foodPartner.phone,
-            address: foodPartner.address
+        message: 'Food partner registered successfully',
+        partner: {
+            _id: partner._id,
+            email: partner.email,
+            name: partner.name,
+            phone: partner.phone,
+            address: partner.address,
+            location: partner.location
         }
     });
 }

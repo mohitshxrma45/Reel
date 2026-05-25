@@ -1,13 +1,66 @@
 // src/pages/auth/PartnerRegister.jsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiEye, FiEyeOff, FiSun, FiMoon } from 'react-icons/fi'
+import { FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiEye, FiEyeOff, FiSun, FiMoon, FiNavigation } from 'react-icons/fi'
+import LocationMap from '../../components/LocationMap'
 
 const PartnerRegister = ({ isDark, toggleTheme }) => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  
+  // Location state
+  const [location, setLocation] = useState({ latitude: null, longitude: null })
+  const [locationError, setLocationError] = useState('')
+  const [isLocating, setIsLocating] = useState(false)
+  const [mapVisible, setMapVisible] = useState(false)
+
+  // Get current location using browser geolocation API
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported by your browser')
+      return
+    }
+
+    setIsLocating(true)
+    setLocationError('')
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        })
+        setMapVisible(true)
+        setIsLocating(false)
+      },
+      (error) => {
+        setLocationError(getLocationErrorMessage(error.code))
+        setIsLocating(false)
+        // Show map anyway with default location
+        setMapVisible(true)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    )
+  }
+
+  const getLocationErrorMessage = (code) => {
+    switch (code) {
+      case 1: return 'Location permission denied. Please enable location access.'
+      case 2: return 'Location information unavailable. Please try again.'
+      case 3: return 'Location request timed out. Please try again.'
+      default: return 'Unable to get your location.'
+    }
+  }
+
+  const handleLocationChange = (newLocation) => {
+    setLocation(newLocation)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,7 +80,9 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
         phone,
         address,
         password,
-        link
+        link,
+        latitude: location.latitude,
+        longitude: location.longitude
       }, {
         withCredentials: true
       })
@@ -70,6 +125,7 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
                   type="text"
                   name="name"
                   placeholder="Tasty Kitchen"
+                  required
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
                 />
               </div>
@@ -83,6 +139,7 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
                   type="email"
                   name="email"
                   placeholder="contact@biz.com"
+                  required
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
                 />
               </div>
@@ -96,6 +153,7 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
                   type="text"
                   name="phone"
                   placeholder="+91 555 555 5555"
+                  required
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
                 />
               </div>
@@ -109,6 +167,7 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
                   type="text"
                   name="address"
                   placeholder="Street, City, State"
+                  required
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
                 />
               </div>
@@ -122,9 +181,52 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
                   type="url"
                   name="link"
                   placeholder="https://your-restaurant.com"
+                  required
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
                 />
               </div>
+            </div>
+
+            {/* Location Section */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                Restaurant Location
+              </label>
+              
+              <button
+                type="button"
+                onClick={getCurrentLocation}
+                disabled={isLocating}
+                className="w-full flex items-center justify-center gap-2 py-3 bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all duration-200 disabled:opacity-50"
+              >
+                <FiNavigation size={18} />
+                {isLocating ? 'Getting location...' : 'Get Current Location'}
+              </button>
+
+              {locationError && (
+                <p className="mt-2 text-xs text-red-500">{locationError}</p>
+              )}
+
+              {location.latitude && location.longitude && (
+                <p className="mt-2 text-xs text-green-600 dark:text-green-400">
+                  ✓ Location captured: {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
+                </p>
+              )}
+
+              {/* Map Toggle */}
+              {mapVisible && (
+                <div className="mt-3">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    Drag marker to adjust exact location:
+                  </p>
+                  <LocationMap
+                    latitude={location.latitude}
+                    longitude={location.longitude}
+                    onLocationChange={handleLocationChange}
+                    height="250px"
+                  />
+                </div>
+              )}
             </div>
 
             <div>
@@ -135,6 +237,7 @@ const PartnerRegister = ({ isDark, toggleTheme }) => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="••••••••"
+                  required
                   className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200"
                 />
                 <button

@@ -41,12 +41,20 @@ router.post('/save',
     foodController.saveFood);
 
 
+
 router.get('/saved',
     authMiddleware.authUserMiddleware,
     foodController.getSavedFood);
 
 
 
+// PUT /api/food/:id/view - Increment views
+router.put('/:id/view',
+    foodController.incrementViews);
 
+// GET /api/food/with-partners - Get all food with partner location
+router.get('/with-partners',
+    authMiddleware.authUserMiddleware,
+    foodController.getFoodWithPartners);
 
 module.exports = router;

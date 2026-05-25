@@ -17,6 +17,14 @@ const foodSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    foodCost: {
+        type: Number,
+        required: true
+    },
+    views: {
+        type: Number,
+        default: 0
+    },
     FoodPartner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Foodpartner",
@@ -30,10 +38,7 @@ const foodSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-  
-    
-    
-})
+}, { timestamps: true });
 
 const foodModel = mongoose.model('Food', foodSchema);
 

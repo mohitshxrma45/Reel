@@ -124,12 +124,7 @@ const Saved = ({ isDark, toggleTheme }) => {
       ref={containerRef}
       className="h-screen w-screen bg-black overflow-y-scroll snap-y snap-mandatory scroll-smooth"
     >
-      <button
-        onClick={toggleTheme}
-        className="fixed top-6 right-6 p-2 rounded-lg bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors duration-200 shadow-lg z-30"
-      >
-        {isDark ? <FiSun size={20} /> : <FiMoon size={20} />}
-      </button>
+      
 
       {videos.map((item) => (
         <ReelCard
