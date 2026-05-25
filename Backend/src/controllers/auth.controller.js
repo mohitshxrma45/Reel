@@ -134,15 +134,18 @@ async function registerFoodPartner(req, res) {
     }
 
     // Create partner
-    const partner = await FoodPartnerModel.create({
+    // Build partner payload and only include location when defined
+    const partnerPayload = {
         name,
         email,
         password: hashedPassword,
         phone,
         address,
-        link,
-        location
-    });
+        link
+    };
+    if (location) partnerPayload.location = location;
+
+    const partner = await FoodPartnerModel.create(partnerPayload);
 
     // Create token
     const token = jwt.sign({
